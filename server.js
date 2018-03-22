@@ -73,18 +73,13 @@ apiRoutes.post('/create', function(req, res){
     }
     //use schema.create to insert data into the db
     User.create(userData, function (err, user) {
-      if (err) throw err
-      else
+      if (err) console.error(err)});
       console.log('User created');
       res.json({ success: true, message: 'User created.' });
-    });
   }
   else
   if (req.body.passwordConf !== req.body.password)
     res.json({ success: false, message: 'Passwords do not equal each other' });
-    else 
-    res.json({ success: false, message: 'User exists' });
-
 });
 
 apiRoutes.post('/authenticate', function(req, res) {
