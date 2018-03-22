@@ -43,8 +43,9 @@ app.get('/setup', function(req, res) {
 
     // create a sample user
     var nick = new User({ 
-      name: 'Nick Cerminara', 
-      password: 'password'
+      name: 'father1frost', 
+      password: 'password',
+      admin: true
     });
     
   
@@ -61,6 +62,7 @@ var apiRoutes = express.Router();
 apiRoutes.post('/authenticate', function(req, res) {
 
   // find the user
+  console.log(req.body);
   User.findOne({
     name: req.body.name
   }, function(err, user) {
@@ -83,7 +85,7 @@ apiRoutes.post('/authenticate', function(req, res) {
       admin: user.admin 
     };
         var token = jwt.sign(payload, app.get('superSecret'), {
-          expiresInMinutes: 1440 // expires in 24 hours
+          //expiresInMinutes: 1440 // expires in 24 hours
         });
 
         // return the information including token as JSON
