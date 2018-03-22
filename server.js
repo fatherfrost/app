@@ -62,7 +62,7 @@ var apiRoutes = express.Router();
 
 apiRoutes.post('/create', function(req, res){
   console.log(req.body);
-  if (req.body.name && !(User.findOne(req.body.name)) &&
+  if (req.body.name &&
     req.body.password &&
     (req.body.passwordConf === req.body.password) &&
     req.body.admin ) {
@@ -73,7 +73,7 @@ apiRoutes.post('/create', function(req, res){
     }
     //use schema.create to insert data into the db
     User.create(userData, function (err, user) {
-      if (err) throw (err)
+      if (err) throw err
       else
       console.log('User created');
       res.json({ success: true, message: 'User created.' });
@@ -82,9 +82,10 @@ apiRoutes.post('/create', function(req, res){
   else
   if (req.body.passwordConf !== req.body.password)
     res.json({ success: false, message: 'Passwords do not equal each other' });
-  if (User.findOne(req.body.name) )
-    res.json({ success: false, message: 'Such username already exists' });
+  /*if (User.findOne(req.body.name) )
+    res.json({ success: false, message: 'Such username already exists' });*/
 });
+   // res.json({ success: false, message: 'Such username already exists' });
 
 apiRoutes.post('/authenticate', function(req, res) {
 
@@ -110,8 +111,8 @@ apiRoutes.post('/authenticate', function(req, res) {
     const payload = {
       admin: user.admin 
     };
-        var token = jwt.sign(payload, app.get('superSecret'), {
-          //expiresInMinutes: 1440 // expires in 24 hours
+        var token = jwt.sign(User, req.app.get('secret'), {
+          expiresIn: 900
         });
 
         // return the information including token as JSON
@@ -120,7 +121,7 @@ apiRoutes.post('/authenticate', function(req, res) {
           message: 'Enjoy your token!',
           token: token
         });
-      }   
+      }     
 
     }
 
