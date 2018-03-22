@@ -62,7 +62,7 @@ var apiRoutes = express.Router();
 
 apiRoutes.post('/create', function(req, res){
   console.log(req.body);
-  if (req.body.name &&
+  if (req.body.name && 
     req.body.password &&
     (req.body.passwordConf === req.body.password) &&
     req.body.admin ) {
@@ -82,10 +82,10 @@ apiRoutes.post('/create', function(req, res){
   else
   if (req.body.passwordConf !== req.body.password)
     res.json({ success: false, message: 'Passwords do not equal each other' });
-  /*if (User.findOne(req.body.name) )
-    res.json({ success: false, message: 'Such username already exists' });*/
+    else 
+    res.json({ success: false, message: 'User exists' });
+
 });
-   // res.json({ success: false, message: 'Such username already exists' });
 
 apiRoutes.post('/authenticate', function(req, res) {
 
