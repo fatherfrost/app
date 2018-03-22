@@ -29,6 +29,7 @@ app.use(morgan('dev'));
 // routes ================
 // =======================
 // basic route
+
 app.get('/', function(req, res) {
     res.send('Hello! The API is at http://localhost:' + port + '/api');
 });
@@ -59,10 +60,28 @@ app.get('/setup', function(req, res) {
 });
 var apiRoutes = express.Router(); 
 
+apiRoutes.post('/create', function(req, res){
+  console.log(req.body);
+  if (req.body.name &&
+    req.body.password &&
+    req.body.admin ) {
+    var userData = {
+      name: req.body.name,
+      password: req.body.password,
+      admin: req.body.admin
+    }
+    //use schema.create to insert data into the db
+    User.create(userData, function (err, user) {
+      if (err) throw (err)
+      else
+      console.log('User created');
+      res.json({ success: true, message: 'User created.' });
+    });
+  }});
+
 apiRoutes.post('/authenticate', function(req, res) {
 
   // find the user
-  console.log(req.body);
   User.findOne({
     name: req.body.name
   }, function(err, user) {
