@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-=======
-// =======================
-// get the packages we need ============
-// =======================
->>>>>>> 9d89f2e3abed73905579c42e05222697a5cf4956
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
@@ -19,11 +13,7 @@ var User = require('./app/models/user'); // get our mongoose model
 // =======================
 var port = process.env.PORT || 8080; // used to create, sign, and verify tokens
 mongoose.connect(config.database); // connect to database
-<<<<<<< HEAD
 app.set('secret', config.secret);
-=======
-app.set('superSecret', config.secret);
->>>>>>> 9d89f2e3abed73905579c42e05222697a5cf4956
 
 // use body parser so we can get info from POST and/or URL parameters
 app.use(bodyParser.urlencoded({extended: false}));
@@ -75,7 +65,6 @@ apiRoutes.post('/create', function (req, res) {
             password: req.body.password,
             admin: req.body.admin ? req.body.admin : false
         });
-<<<<<<< HEAD
 
 
         //use schema.create to insert data into the db
@@ -88,20 +77,6 @@ apiRoutes.post('/create', function (req, res) {
             console.log('User created', user);
             res.json({success: true, message: 'User created.'});
 
-=======
-
-
-        //use schema.create to insert data into the db
-        userData.save(function (err, user) {
-            console.log(user);
-            if (err) {
-                console.error(err);
-            }
-
-            console.log('User created', user);
-            res.json({success: true, message: 'User created.'});
-
->>>>>>> 9d89f2e3abed73905579c42e05222697a5cf4956
         });
         //console.log('User created');
         //res.json({ success: true, message: 'User created.' });
@@ -134,17 +109,10 @@ apiRoutes.post('/authenticate', function (req, res) {
                 // create a token with only our given payload
                 // we don't want to pass in the entire user since that has the password
                 const payload = {
-<<<<<<< HEAD
                     id: user._id,
                 };
                 var token = jwt.sign(payload, req.app.get('secret'), {
                     expiresIn: "5h"
-=======
-                    admin: user.admin
-                };
-                var token = jwt.sign(User, req.app.get('secret'), {
-                    expiresIn: 900
->>>>>>> 9d89f2e3abed73905579c42e05222697a5cf4956
                 });
 
                 // return the information including token as JSON
@@ -171,11 +139,23 @@ apiRoutes.get('/', function (req, res) {
 });
 
 // route to return all users (GET http://localhost:8080/api/users)
-apiRoutes.get('/users', function (req, res) {
-    User.find({}, function (err, users) {
-        res.json(users);
-    });
-});
+apiRoutes.post('/user', function (req, res, next)
+ {
+  jwt.verify(req.headers.token, config.secret, function (err, decoded){
+    if (err){
+        console.log(err);
+        next();
+    } else {
+        User.findById(decoded.id, function(error, user) {
+          res.json({success: true,  message: user});
+          next();
+         })
+    }
+  });
+
+ })
+
+
 
 // apply the routes to our application with the prefix /api
 app.use('/api', apiRoutes);
