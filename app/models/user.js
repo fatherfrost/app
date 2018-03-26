@@ -6,7 +6,7 @@ var User = new Schema({
     name: {type: String, unique:true },
     password: String,
     passwordConf: String,
-    admin: Boolean
+    //admin: Boolean
 });
 
 /*User.methods.comparePassword = function(password){
