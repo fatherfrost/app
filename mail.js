@@ -6,6 +6,7 @@ var jwt = require('jsonwebtoken');
 var error = require('./errors');
 var nodemailer = require('nodemailer');
 var User = require('./app/models/user');
+var error = require('./errors');
 
 router.post('/mail', function (req, res) {
     var transporter = nodemailer.createTransport( {
@@ -17,7 +18,8 @@ router.post('/mail', function (req, res) {
     });
 
     User.findOne({mail: req.body.mail}, function(err, user){
-        if (!user) res._end(new error(err.message, error.NOT_AUTHORIZED, error.CODE.INVALID_AUTHORIZATION_USERNOTFOUND));
+        if (err) res._end(new error(err.message, err.NOT_AUTHORIZED, err.CODE.INVALID_AUTHORIZATION_USERNOTFOUND));
+        if (!user) res.json({success: true, message: 'User not found'})
         else
         {
         let mailOptions = {
