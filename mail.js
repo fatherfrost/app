@@ -17,8 +17,7 @@ router.post('/mail', function (req, res) {
     });
 
     User.findOne({mail: req.body.mail}, function(err, user){
-        if (err) console.log(err);
-        if (!user) res.json({success: false, message: 'This email is not registred.'});
+        if (!user) res._end(new error(err.message, error.NOT_AUTHORIZED, error.CODE.INVALID_AUTHORIZATION_USERNOTFOUND));
         else
         {
         let mailOptions = {
@@ -29,7 +28,7 @@ router.post('/mail', function (req, res) {
         };
         transporter.sendMail(mailOptions, function(err, info)
             { 
-            if (err) return console.log(err);
+            if (err) console.log(err);
             console.log('Message sent: %s', info.messageId);
             });
         res.json({success:true, message:'Message is sent to you'})
