@@ -6,11 +6,11 @@ var error = require('./errors');
 
 router.post('/create', function (req, res) {
     console.log('req.body', req.body);
-    if (req.body.name && req.body.password && (req.body.passwordConf === req.body.password)) {
+    if (req.body.mail && req.body.name && req.body.password && (req.body.passwordConf === req.body.password)) {
         var userData = new User({
+            mail: req.body.mail,
             name: req.body.name,
-            password: req.body.password,
-            admin: req.body.admin ? req.body.admin : false
+            password: req.body.password
         });
         userData.save(function (err, user) {
             console.log(user);

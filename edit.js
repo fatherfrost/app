@@ -9,14 +9,6 @@ var bodyParser = require('body-parser');
 router.post('/edit', auth, function (req, res)
     {
         let user = req.user;
-        console.log('USER');
-        console.log(req.user);
-       // User.findOne( {name: req.body.name}, function (err, user) {
-        //if (err) return res._end(new error(err.message, error.STATUS.NOT_AUTHORIZED, error.CODE.INVALID_AUTHORIZATION_USERNOTFOUND));
-
-        // if (!user) 
-        //    return res._end(new error('User not found.', error.STATUS.NOT_AUTHORIZED, error.CODE.INVALID_AUTHORIZATION_USERNOTFOUND));
-        
         if (user.password != req.body.password) {
             res._end(new error('Password not correct.', error.NOT_AUTHORIZED, error.CODE.INVALID_AUTHORIZATION_PASSWORD));
         } else {
