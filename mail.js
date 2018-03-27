@@ -18,8 +18,8 @@ router.post('/mail', function (req, res) {
     });
 
     User.findOne({mail: req.body.mail}, function(err, user){
-        if (err) res._end(new error(err.message, err.NOT_AUTHORIZED, err.CODE.INVALID_AUTHORIZATION_USERNOTFOUND));
-        if (!user) res.json({success: false, message: 'User not found'})
+        if (err) return res._end(new error(err.message, error.STATUS.NOT_AUTHORIZED, error.CODE.INVALID_AUTHORIZATION_USERNOTFOUND));
+        if (!user) res._end(new error('User not found.', error.STATUS.NOT_AUTHORIZED, error.CODE.INVALID_AUTHORIZATION_USERNOTFOUND));
         else
         {
         let mailOptions = {
