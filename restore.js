@@ -22,21 +22,24 @@ router.post('/restore', function(req, res)
     User.findOne({mail:req.body.mail}, function(err, user){
         if (err) throw err;
         if (user){
-            if (user.mail){
-                let generateToken = () => {
-                    return Math.random().toString(36).slice(2);
+            if (user.mail){{
+                const payload = {
+                    id: user._id,
                 };
-                let token = generateToken() + generateToken() + generateToken();
-                user.resetPasswordToken = token;
-                user.resetPasswordExpires = moment().add(1, 'h');
-                user.save(function (err, user) {
-                    if (err) throw err;                    
+                var token = jwt.sign(payload, req.app.get('secret'), {
+                    expiresIn: "1h"
                 });
+                var link = 'http://localhost:8080/password_change?t=' + token;
+                res.json({
+                    success: true,
+                    message: link,
+                });
+                }                  
                 let mailOptions = {
                     from: 'Login admin', 
                     to: user.mail, 
                     subject: 'Password restore', 
-                    text: 'Follow the link to reset your password: http://localhost:8080/reset/' + token + '. Link expires in 24 hours.', 
+                    text: 'Follow the link to reset your password: ' + link + '. Link expires in 24 hours.', 
                 }
                 {
                 transporter.sendMail(mailOptions, function(err, info)
