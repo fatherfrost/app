@@ -12,7 +12,7 @@ router.post('/password_change?:t', auth,  function(req, res){
                 console.log(req.body.passwordNew);
                 req.active_user.password = req.body.passwordNew;
                 req.active_user.save();
-                res.json({success: true, message: 'Password changed.'})
+                res.json({success: true, message: 'Password changed.'});
             }
             else res.json({message:'Passwords not equal'});
         }

@@ -38,11 +38,14 @@ router.post('/restore', function(req, res)
                     subject: 'Password restore', 
                     text: 'Follow the link to reset your password: http://localhost:8080/reset/' + token + '. Link expires in 24 hours.', 
                 }
+                {
                 transporter.sendMail(mailOptions, function(err, info)
                     { 
                         if (err) console.log(err);
                         console.log('Message sent: %s', info.messageId);
                     });
+                }
+                res.json({success: true, message: 'Message sent'});
                 }
                 else
                     res._end(new error('This account do not has email', error.STATUS.INTERNAL_SERVER_ERROR, error.CODE.INVALID_FORGOT_EMAIL_EMPTY));
