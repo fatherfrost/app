@@ -86,7 +86,7 @@ var reset = require('./reset');
 app.post('/reset/:resetToken', reset);
 
 var password_change = require('./password_change');
-app.post('/password_change', password_change);
+app.post('/password_change?:t', password_change);
 
 app.listen(port);
 console.log('Server started: http://localhost:' + port);

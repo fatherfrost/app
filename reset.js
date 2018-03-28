@@ -27,12 +27,12 @@ router.post('/reset/:resetToken', function(req, res)
                     id: user._id,
                 };
                 var token = jwt.sign(payload, req.app.get('secret'), {
-                    expiresIn: "15m"
+                    expiresIn: "1h"
                 });
+                var link = 'http://localhost:8080/password_change?t=' + token;
                 res.json({
                     success: true,
-                    message: 'Enjoy your token!',
-                    token: token
+                    message: link,
                 });
             }
 }

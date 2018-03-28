@@ -5,32 +5,35 @@ var User = require('./app/models/user');
 var error = require('./errors');
 var jwt = require('jsonwebtoken'); 
 
-router.post('/password_change', auth, function(req, res){
-        if(req.user)
-        {
-            if (req.body.password === req.body.passwordConf)
+router.post('/password_change?:t', auth,  function(req, res){ 
+    if (req.body.passwordNew && req.body.passwordNewConf){    
+            if (req.body.passwordNew === req.body.passwordNewConf)
             {
-                req.user.password = req.body.password;
-                req.user.save();
+                console.log(req.body.passwordNew);
+                req.active_user.password = req.body.passwordNew;
+                req.active_user.save();
                 res.json({success: true, message: 'Password changed.'})
             }
+            else res.json({message:'Passwords not equal'});
         }
-        else res._end(new error('User not found.', error.STATUS.NOT_AUTHORIZED, error.CODE.INVALID_AUTHORIZATION_USERNOTFOUND));
-        })
+        else res.json({message: 'No password '});
+
+        });
+        
 
 function auth (req, res, next) {
-    jwt.verify(req.headers.token, config.secret, function (err, decoded){
+    jwt.verify(req.query.t, config.secret, function (err, decoded){
         if (err){
             res._end(new error(err.message, error.LOGIN_TIME_OUT, error.CODE.INVALID_TOKEN));
-           next();
+            next();
       } else 
           {
-             console.log(req.headers);
               User.findById(decoded.id, function(error, user) {
-                req.user = user;
+                req.active_user = user;
                 next();
                })
           }
-      })
+      })    
 }
+
 module.exports = router;

@@ -18,8 +18,8 @@ router.post('/user', function (req, res, next)
                 User.findById(decoded.id, function(error, user) {
                   res.json({success: true,  message: user});
                   next();
-                 })
-            }
+            })
+        }
         })
     }
 );
