@@ -31,8 +31,8 @@ router.post('/restore', function(req, res)
                 });
                 var link = 'http://localhost:8080/password_change?t=' + token;
                 res.json({
-                    success: true,
-                    message: link,
+                    success: true
+                    //message: link,
                 });
                 }                  
                 let mailOptions = {

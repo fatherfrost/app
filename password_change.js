@@ -5,7 +5,7 @@ var User = require('./app/models/user');
 var error = require('./errors');
 var jwt = require('jsonwebtoken'); 
 
-router.post('/password_change?:t', auth,  function(req, res){ 
+router.post('/password_change', auth,  function(req, res){ 
     if (req.body.passwordNew && req.body.passwordNewConf){    
             if (req.body.passwordNew === req.body.passwordNewConf)
             {
@@ -22,7 +22,7 @@ router.post('/password_change?:t', auth,  function(req, res){
         
 
 function auth (req, res, next) {
-    jwt.verify(req.query.t, config.secret, function (err, decoded){
+    jwt.verify(req.headers.token, config.secret, function (err, decoded){
         if (err){
             res._end(new error(err.message, error.LOGIN_TIME_OUT, error.CODE.INVALID_TOKEN));
             next();
