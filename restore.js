@@ -48,7 +48,7 @@ router.post('/restore', function(req, res)
                         console.log('Message sent: %s', info.messageId);
                     });
                 }
-                res.json({success: true, message: 'Message sent'});
+                //res.json({success: true, message: 'Message sent'});
                 }
                 else
                     res._end(new error('This account do not has email', error.STATUS.INTERNAL_SERVER_ERROR, error.CODE.INVALID_FORGOT_EMAIL_EMPTY));
