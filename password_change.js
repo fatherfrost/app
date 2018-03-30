@@ -12,6 +12,12 @@ router.post('/password_change', auth,  function(req, res){
                 console.log(req.body.passwordNew);
                 req.active_user.password = req.body.passwordNew;
                 req.active_user.save();
+                const payload = {
+                    id: user._id,
+                };
+                var token = jwt.sign(payload, req.app.get('secret'), {
+                    expiresIn: "1h"
+                })
                 res.json({success: true, message: 'Password changed.'});
             }
             else res.json({message:'Passwords not equal'});

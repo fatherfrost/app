@@ -24,7 +24,7 @@ router.post('/restore', function(req, res)
         if (user){
             if (user.mail){{
                 const payload = {
-                    id: user._id,
+                    id: user._id,   
                 };
                 var token = jwt.sign(payload, req.app.get('secret'), {
                     expiresIn: "1h"

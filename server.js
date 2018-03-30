@@ -8,6 +8,11 @@ var config = require('./config');
 var User = require('./app/models/user');
 var error = require('./errors');
 var nodemailer = require('nodemailer');
+var Session = require('express-session');
+var passport = require('passport');
+var auth = require('./auth');
+var cookieParser = require('cookie-parser');
+var cookieSession = require('cookie-session');
 
 var port = process.env.PORT || 8080; 
 mongoose.connect(config.database); 
@@ -16,6 +21,46 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 app.use(morgan('dev'));
+
+auth(passport);
+
+app.use(passport.initialize());
+
+app.get('/', (req, res) => {
+     {
+        res.token = req.session.token;
+        res.json({
+            status: 'session cookie set',
+        });
+        res.redirect('/')
+    } 
+});
+
+app.get('/logout', (req, res) => {
+    req.logout();
+    req.session = null;
+    res.redirect('/');
+});
+
+app.use(cookieSession({
+    name: 'session',
+    keys: ['123']
+}));
+app.use(cookieParser());
+
+app.get('/auth/google', passport.authenticate('google', {
+scope: ['https://www.googleapis.com/auth/userinfo.profile']
+}));
+
+app.get('/auth/google/callback',
+    passport.authenticate('google', {failureRedirect:'/'}),
+    (req, res) => {
+        let generateToken = Math.random().toString();
+        var token = generateToken + generateToken;
+        req.session.token = token;
+        res.redirect('/');
+    }
+);
 
 app.use((req, res, next) => {
     res._end = (obj, statusCode) => {
