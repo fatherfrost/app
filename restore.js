@@ -29,7 +29,7 @@ router.post('/restore', function(req, res)
                 var token = jwt.sign(payload, req.app.get('secret'), {
                     expiresIn: "1h"
                 });
-                var link = 'http://localhost:8080/password_change?t=' + token;
+                var link = 'http://localhost:4200/password_change?t=' + token;
                 res.json({
                     success: true
                     //message: link,
@@ -39,7 +39,7 @@ router.post('/restore', function(req, res)
                     from: 'Login admin', 
                     to: user.mail, 
                     subject: 'Password restore', 
-                    text: 'Follow the link to reset your password: ' + link + '. Link expires in 24 hours.', 
+                    text: 'Follow the link to reset your password: ' + link + '. Link expires in 1 hour.', 
                 }
                 {
                 transporter.sendMail(mailOptions, function(err, info)

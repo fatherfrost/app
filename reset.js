@@ -21,7 +21,7 @@ router.post('/reset/:resetToken', function(req, res)
                 var token = jwt.sign(payload, req.app.get('secret'), {
                     expiresIn: "1h"
                 });
-                var link = 'http://localhost:8080/password_change?t=' + token;
+                var link = 'http://localhost:4200/password_change?t=' + token;
                 res.json({
                     success: true,
                     message: link,
