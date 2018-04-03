@@ -79,6 +79,7 @@ let vapidKeys = {
     publicKey: 'BKsiyEqqfmsT8GSWikxEqnxBuII8KmG0Acf_QqISXkMUdOZLSj3tJKdw0J2Z5Bx02vccGYSLqiieujW_-PZL5_o',
     privateKey: '8dCXtKcSCP51OBUeXuwACPsLMIN3eyYirDClbOUPFQA'
   };
+  webPush.setGCMAPIKey('AIzaSyD5wdhtTVf5VaBOwMntWwkvMrnF1ZipZP4');
   
   // Tell web push about our application server
   webPush.setVapidDetails('mailto:email@domain.com', vapidKeys.publicKey, vapidKeys.privateKey);
