@@ -10,10 +10,10 @@ var error = require('./errors');
 var nodemailer = require('nodemailer');
 var Session = require('express-session');
 var passport = require('passport');
-var auth = require('./auth');
+//var auth = require('./auth');
 var cookieParser = require('cookie-parser');
 var cookieSession = require('cookie-session');
-const webpush = require('web-push');
+const webPush = require('web-push');
 
 var port = process.env.PORT || 8080; 
 mongoose.connect(config.database); 
@@ -23,7 +23,7 @@ app.use(bodyParser.json());
 
 app.use(morgan('dev'));
 
-auth(passport);
+//auth(passport);
 
 app.use(passport.initialize());
 
@@ -49,11 +49,11 @@ app.use(cookieSession({
 }));
 app.use(cookieParser());
 
-app.get('/auth/google', passport.authenticate('google', {
+/*app.get('/auth/google', passport.authenticate('google', {
 scope: ['https://www.googleapis.com/auth/userinfo.profile']
-}));
+}));*/
 
-app.get('/auth/google/callback',
+/*app.get('/auth/google/callback',
     passport.authenticate('google', {failureRedirect:'/'}),
     (req, res) => {
         let generateToken = Math.random().toString();
@@ -61,9 +61,9 @@ app.get('/auth/google/callback',
         req.session.token = token;
         res.redirect('/');
     }
-);
+);*/
 
-app.post('/subscribe', function(req, res){
+app.get('/subscribe', function(req, res){
     User.findOne({name: req.body.user}, function(err, user){
         if(user)
         {
@@ -75,30 +75,35 @@ app.post('/subscribe', function(req, res){
     })
 })
 
+let vapidKeys = {
+    publicKey: 'BKsiyEqqfmsT8GSWikxEqnxBuII8KmG0Acf_QqISXkMUdOZLSj3tJKdw0J2Z5Bx02vccGYSLqiieujW_-PZL5_o',
+    privateKey: '8dCXtKcSCP51OBUeXuwACPsLMIN3eyYirDClbOUPFQA'
+  };
+  
+  // Tell web push about our application server
+  webPush.setVapidDetails('mailto:email@domain.com', vapidKeys.publicKey, vapidKeys.privateKey);
 
-app.post('/push', function(req, res){
 
-// VAPID keys should only be generated only once.
-const vapidKeys = webpush.generateVAPIDKeys();
-
-webpush.setGCMAPIKey('<Your GCM API Key Here>');
-webpush.setVapidDetails(
-  'mailto:example@yourdomain.org',
-  vapidKeys.publicKey,
-  vapidKeys.privateKey
-)
-
-// This is the same output of calling JSON.stringify on a PushSubscription
-const pushSubscription = {
-  endpoint: req.body.endpoint,
-  keys: {
-    auth: '.....',
-    p256dh: '.....'
-  }
-};
-webpush.sendNotification(pushSubscription, 'Your Push Payload Text');
-
-})
+  app.post('/push', (req, res, next) => {
+    User.findOne({name: req.body.name}, function(err, user){
+    const notificationMessage = "YOU FACE JARRAXXUS";
+    console.log(user);
+    const pushSubscription = {
+        endpoint: user.endpoint,
+        keys: {
+          p256dh: user.p256dh,
+          auth: user.auth
+        }
+      };    
+  
+    if (!user) {
+      res.json("bad");
+      return next(false);
+    }
+        webPush.sendNotification(pushSubscription, notificationMessage);
+        res.json({message:'SUCCESS'});
+      });
+    })
 
 app.use((req, res, next) => {
     res._end = (obj, statusCode) => {
