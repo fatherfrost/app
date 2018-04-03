@@ -8,7 +8,11 @@ var User = new Schema({
     password: String,
     passwordConf: String,
     resetPasswordToken: String,
-    resetPasswordExpires: Date
+    resetPasswordExpires: Date,
+    pushToken: String,
+    auth: String,
+    p256dh: String,
+    endpoint: String
 });
 
 module.exports =  mongoose.model('User', User)

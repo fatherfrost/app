@@ -13,6 +13,7 @@ var passport = require('passport');
 var auth = require('./auth');
 var cookieParser = require('cookie-parser');
 var cookieSession = require('cookie-session');
+const webpush = require('web-push');
 
 var port = process.env.PORT || 8080; 
 mongoose.connect(config.database); 
@@ -61,6 +62,43 @@ app.get('/auth/google/callback',
         res.redirect('/');
     }
 );
+
+app.post('/subscribe', function(req, res){
+    User.findOne({name: req.body.user}, function(err, user){
+        if(user)
+        {
+            user.auth = req.body.auth;
+            user.p256dh = req.body.p256dh;
+            user.endpoint = req.body.endpoint;
+            user.save();
+        }
+    })
+})
+
+
+app.post('/push', function(req, res){
+
+// VAPID keys should only be generated only once.
+const vapidKeys = webpush.generateVAPIDKeys();
+
+webpush.setGCMAPIKey('<Your GCM API Key Here>');
+webpush.setVapidDetails(
+  'mailto:example@yourdomain.org',
+  vapidKeys.publicKey,
+  vapidKeys.privateKey
+)
+
+// This is the same output of calling JSON.stringify on a PushSubscription
+const pushSubscription = {
+  endpoint: req.body.endpoint,
+  keys: {
+    auth: '.....',
+    p256dh: '.....'
+  }
+};
+webpush.sendNotification(pushSubscription, 'Your Push Payload Text');
+
+})
 
 app.use((req, res, next) => {
     res._end = (obj, statusCode) => {
