@@ -64,7 +64,7 @@ scope: ['https://www.googleapis.com/auth/userinfo.profile']
 );*/
 
 app.get('/subscribe', function(req, res){
-    User.findOne({name: req.body.user}, function(err, user){
+    User.findOne({name: req.body.name}, function(err, user){
         if(user)
         {
             user.auth = req.body.auth;
@@ -95,13 +95,20 @@ let vapidKeys = {
           p256dh: user.p256dh,
           auth: user.auth
         }
-      };    
+      };  
+      const options = {
+        gcmAPIKey: 'AIzaSyD5wdhtTVf5VaBOwMntWwkvMrnF1ZipZP4',
+        vapidDetails: {
+          publicKey: 'BKsiyEqqfmsT8GSWikxEqnxBuII8KmG0Acf_QqISXkMUdOZLSj3tJKdw0J2Z5Bx02vccGYSLqiieujW_-PZL5_o',
+          privateKey: '8dCXtKcSCP51OBUeXuwACPsLMIN3eyYirDClbOUPFQA'
+        }  
+    }
   
     if (!user) {
       res.json("bad");
       return next(false);
     }
-        webPush.sendNotification(pushSubscription, notificationMessage);
+        webPush.sendNotification(pushSubscription, notificationMessage, options);
         res.json({message:'SUCCESS'});
       });
     })
