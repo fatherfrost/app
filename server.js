@@ -92,7 +92,7 @@ let vapidKeys = {
   app.post('/push', (req, res, next) => {
     User.findOne({name: req.body.name}, function(err, user){
         var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
-            to: 'AIzaSyD5wdhtTVf5VaBOwMntWwkvMrnF1ZipZP4', 
+            to: 'https://fcm.googleapis.com/fcm/send/dtkczSZRDW0:APA91bHIFS0xjBRFtySuB4-b2yiQjZWxwDRq_NYWxKc-9GLeaqPDGTYOaZY38DFciDUXPKsH51cNWkA89NQUrOOMc42_QdzusoIJieMjmnjtlvZZ4-IQHRqqFEem_Jl6OL0RoF5XRv1G', 
             
             notification: {
                 title: 'LEEEROY', 
