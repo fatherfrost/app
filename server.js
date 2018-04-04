@@ -69,7 +69,7 @@ app.post('/subscribe', function(req, res){
         {
             console.log(user);
             user.auth = req.body.auth;
-            user.p256dh = req.body.p256dh;
+            user.p256dh = req.body.p256dh; 
             user.endpoint = req.body.endpoint;
             user.save();
             res.json({message: 'success'});
@@ -99,11 +99,11 @@ let vapidKeys = {
         }
       };  
       const options = {
-        gcmAPIKey: 'AIzaSyD5wdhtTVf5VaBOwMntWwkvMrnF1ZipZP4',
-        vapidDetails: {
+        gcmAPIKey: 'AIzaSyDEjpU2M7dvm9c2Qh6xZxBsmQTitlNNWFU',
+        /*vapidDetails: {
           publicKey: 'BKsiyEqqfmsT8GSWikxEqnxBuII8KmG0Acf_QqISXkMUdOZLSj3tJKdw0J2Z5Bx02vccGYSLqiieujW_-PZL5_o',
           privateKey: '8dCXtKcSCP51OBUeXuwACPsLMIN3eyYirDClbOUPFQA'
-        }  
+        }  */
     }
   
     if (!user) {
