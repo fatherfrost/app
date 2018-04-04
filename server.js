@@ -89,8 +89,9 @@ let vapidKeys = {
   // Tell web push about our application server
   webPush.setVapidDetails('mailto:email@domain.com', vapidKeys.publicKey, vapidKeys.privateKey);
 
-  app.post('/push', (req, res, next) => {
+  app.post('/push', function (req, res) {
     User.findOne({name: req.body.name}, function(err, user){
+        if (err) console.log(err + 'HEELO ITS ME EEER');
         var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
             to: 'https://fcm.googleapis.com/fcm/send/dtkczSZRDW0:APA91bHIFS0xjBRFtySuB4-b2yiQjZWxwDRq_NYWxKc-9GLeaqPDGTYOaZY38DFciDUXPKsH51cNWkA89NQUrOOMc42_QdzusoIJieMjmnjtlvZZ4-IQHRqqFEem_Jl6OL0RoF5XRv1G', 
             
