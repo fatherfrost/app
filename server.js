@@ -100,17 +100,25 @@ let vapidKeys = {
       };  
       const options = {
         gcmAPIKey: 'AIzaSyDEjpU2M7dvm9c2Qh6xZxBsmQTitlNNWFU',
-        /*vapidDetails: {
+        vapidDetails: {
           publicKey: 'BKsiyEqqfmsT8GSWikxEqnxBuII8KmG0Acf_QqISXkMUdOZLSj3tJKdw0J2Z5Bx02vccGYSLqiieujW_-PZL5_o',
           privateKey: '8dCXtKcSCP51OBUeXuwACPsLMIN3eyYirDClbOUPFQA'
-        }  */
+        }  
     }
   
     if (!user) {
       res.json("bad");
       return next(false);
     }
-        webPush.sendNotification(pushSubscription, notificationMessage, options);
+        webPush.sendNotification(pushSubscription, notificationMessage,options, {}).then((response) =>{
+            console.log("Status : "+util.inspect(response.statusCode));
+            console.log("Headers : "+JSON.stringify(response.headers));
+            console.log("Body : "+JSON.stringify(response.body));
+        }).catch((error) =>{
+            console.log("Status : "+util.inspect(error.statusCode));
+            console.log("Headers : "+JSON.stringify(error.headers));
+            console.log("Body : "+JSON.stringify(error.body));
+        });
         res.json({message:'SUCCESS'});
       });
     })
