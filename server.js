@@ -91,9 +91,9 @@ let vapidKeys = {
 
   app.post('/push', function (req, res) {
     User.findOne({name: req.body.name}, function(err, user){
-        if (err) console.log(err + 'HEELO ITS ME EEER');
+        if (err) throw err;
         var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
-            to: 'https://fcm.googleapis.com/fcm/send/dtkczSZRDW0:APA91bHIFS0xjBRFtySuB4-b2yiQjZWxwDRq_NYWxKc-9GLeaqPDGTYOaZY38DFciDUXPKsH51cNWkA89NQUrOOMc42_QdzusoIJieMjmnjtlvZZ4-IQHRqqFEem_Jl6OL0RoF5XRv1G', 
+            to: 'BLiTsSfFfIGUSA7U25y5PAVbwkaVnUowvcMNSQ5cVQT846KCiX8Huik9FzQnJXGk2U-iklSXWxje1evRRmy8UIU=', 
             
             notification: {
                 title: 'LEEEROY', 
