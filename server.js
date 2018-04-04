@@ -67,6 +67,7 @@ app.post('/subscribe', function(req, res){
     User.findOne({name: req.body.name}, function(err, user){
         if(user)
         {
+            console.log(user);
             user.auth = req.body.auth;
             user.p256dh = req.body.p256dh;
             user.endpoint = req.body.endpoint;
