@@ -7,6 +7,7 @@
         "cookie-session": "^2.0.0-beta.3",
         "express": "^4.16.3",
         "express-session": "^1.15.6",
+        "fcm-node": "^1.2.1",
         "googleapis": "^27.0.0",
         "jsonwebtoken": "^8.2.0",
         "moment": "^2.21.0",

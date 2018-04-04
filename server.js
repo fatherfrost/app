@@ -14,6 +14,9 @@ var passport = require('passport');
 var cookieParser = require('cookie-parser');
 var cookieSession = require('cookie-session');
 const webPush = require('web-push');
+var FCM = require('fcm-node');
+var serverKey = 'AIzaSyD5wdhtTVf5VaBOwMntWwkvMrnF1ZipZP4';
+var fcm = new FCM(serverKey);
 
 var port = process.env.PORT || 8080; 
 mongoose.connect(config.database); 
@@ -86,42 +89,25 @@ let vapidKeys = {
   // Tell web push about our application server
   webPush.setVapidDetails('mailto:email@domain.com', vapidKeys.publicKey, vapidKeys.privateKey);
 
-
   app.post('/push', (req, res, next) => {
     User.findOne({name: req.body.name}, function(err, user){
-    const notificationMessage = "YOU FACE JARRAXXUS";
-    console.log(user);
-    const pushSubscription = {
-        endpoint: user.endpoint,
-        keys: {
-          p256dh: user.p256dh,
-          auth: user.auth
-        }
-      };  
-      const options = {
-        gcmAPIKey: 'AIzaSyDEjpU2M7dvm9c2Qh6xZxBsmQTitlNNWFU',
-        vapidDetails: {
-          publicKey: 'BKsiyEqqfmsT8GSWikxEqnxBuII8KmG0Acf_QqISXkMUdOZLSj3tJKdw0J2Z5Bx02vccGYSLqiieujW_-PZL5_o',
-          privateKey: '8dCXtKcSCP51OBUeXuwACPsLMIN3eyYirDClbOUPFQA'
-        }  
-    }
-  
-    if (!user) {
-      res.json("bad");
-      return next(false);
-    }
-        webPush.sendNotification(pushSubscription, notificationMessage,options, {}).then((response) =>{
-            console.log("Status : "+util.inspect(response.statusCode));
-            console.log("Headers : "+JSON.stringify(response.headers));
-            console.log("Body : "+JSON.stringify(response.body));
-        }).catch((error) =>{
-            console.log("Status : "+util.inspect(error.statusCode));
-            console.log("Headers : "+JSON.stringify(error.headers));
-            console.log("Body : "+JSON.stringify(error.body));
+        var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+            to: 'AIzaSyD5wdhtTVf5VaBOwMntWwkvMrnF1ZipZP4', 
+            
+            notification: {
+                title: 'LEEEROY', 
+                body: 'JEEENKINS' 
+            },
+        };
+        
+        fcm.send(message, function(err, response){
+            if (err) {
+                console.log("Something has gone wrong!");
+            } else {
+                console.log("Successfully sent with response: ", response);
+            }
         });
-        res.json({message:'SUCCESS'});
-      });
-    })
+    })})
 
 app.use((req, res, next) => {
     res._end = (obj, statusCode) => {
