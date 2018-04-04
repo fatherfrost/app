@@ -63,7 +63,7 @@ scope: ['https://www.googleapis.com/auth/userinfo.profile']
     }
 );*/
 
-app.get('/subscribe', function(req, res){
+app.post('/subscribe', function(req, res){
     User.findOne({name: req.body.name}, function(err, user){
         if(user)
         {
@@ -71,6 +71,7 @@ app.get('/subscribe', function(req, res){
             user.p256dh = req.body.p256dh;
             user.endpoint = req.body.endpoint;
             user.save();
+            res.json({message: 'success'});
         }
     })
 })
