@@ -93,7 +93,7 @@ let vapidKeys = {
     User.findOne({name: req.body.name}, function(err, user){
         if (err) throw err;
         var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
-            to: 'BLiTsSfFfIGUSA7U25y5PAVbwkaVnUowvcMNSQ5cVQT846KCiX8Huik9FzQnJXGk2U-iklSXWxje1evRRmy8UIU=', 
+            to: 'AAAAXEpaolo:APA91bExftBUrA-MrcEh65lmCI2MOzuWaUzsdUzM-Q9OtAi9XvrApIEuqurZLdknXoyBDUdaDNdYh_U550SBdnRWuN2T9Tp4a9kPdraYOXIwFroUsvJn_R_hSm5TqiYJ83SQAAbe1_63', 
             
             notification: {
                 title: 'LEEEROY', 
@@ -103,7 +103,7 @@ let vapidKeys = {
         
         fcm.send(message, function(err, response){
             if (err) {
-                console.log("Something has gone wrong!");
+                console.log("Something has gone wrong!", err);
             } else {
                 console.log("Successfully sent with response: ", response);
             }
