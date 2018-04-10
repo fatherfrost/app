@@ -13,8 +13,7 @@ var User = new Schema({
     auth: String,
     p256dh: String,
     endpoint: String,
-    taskName: String,
-    deadline: Date
+    todo = []
 });
 
 module.exports =  mongoose.model('User', User)
