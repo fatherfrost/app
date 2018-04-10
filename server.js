@@ -10,13 +10,9 @@ var error = require('./errors');
 var nodemailer = require('nodemailer');
 var Session = require('express-session');
 var passport = require('passport');
-//var auth = require('./auth');
 var cookieParser = require('cookie-parser');
 var cookieSession = require('cookie-session');
-const webPush = require('web-push');
-var FCM = require('fcm-node');
-var serverKey = 'AIzaSyD5wdhtTVf5VaBOwMntWwkvMrnF1ZipZP4';
-var fcm = new FCM(serverKey);
+const webpush = require('web-push');
 
 var port = process.env.PORT || 8080; 
 mongoose.connect(config.database); 
@@ -26,45 +22,7 @@ app.use(bodyParser.json());
 
 app.use(morgan('dev'));
 
-//auth(passport);
-
 app.use(passport.initialize());
-
-app.get('/', (req, res) => {
-     {
-        res.token = req.session.token;
-        res.json({
-            status: 'session cookie set',
-        });
-        res.redirect('/')
-    } 
-});
-
-app.get('/logout', (req, res) => {
-    req.logout();
-    req.session = null;
-    res.redirect('/');
-});
-
-app.use(cookieSession({
-    name: 'session',
-    keys: ['123']
-}));
-app.use(cookieParser());
-
-/*app.get('/auth/google', passport.authenticate('google', {
-scope: ['https://www.googleapis.com/auth/userinfo.profile']
-}));*/
-
-/*app.get('/auth/google/callback',
-    passport.authenticate('google', {failureRedirect:'/'}),
-    (req, res) => {
-        let generateToken = Math.random().toString();
-        var token = generateToken + generateToken;
-        req.session.token = token;
-        res.redirect('/');
-    }
-);*/
 
 app.post('/subscribe', function(req, res){
     User.findOne({name: req.body.name}, function(err, user){
@@ -80,35 +38,28 @@ app.post('/subscribe', function(req, res){
     })
 })
 
-let vapidKeys = {
-    publicKey: 'BKsiyEqqfmsT8GSWikxEqnxBuII8KmG0Acf_QqISXkMUdOZLSj3tJKdw0J2Z5Bx02vccGYSLqiieujW_-PZL5_o',
-    privateKey: '8dCXtKcSCP51OBUeXuwACPsLMIN3eyYirDClbOUPFQA'
-  };
-  webPush.setGCMAPIKey('AIzaSyD5wdhtTVf5VaBOwMntWwkvMrnF1ZipZP4');
-  
-  // Tell web push about our application server
-  webPush.setVapidDetails('mailto:email@domain.com', vapidKeys.publicKey, vapidKeys.privateKey);
+ 
+// VAPID keys should only be generated only once.
+const vapidKeys = webpush.generateVAPIDKeys();
+ 
+webpush.setfcmApiKey('AIzaSyD5wdhtTVf5VaBOwMntWwkvMrnF1ZipZP4');
+webpush.setVapidDetails(
+  'mailto:father1frost@gmail.com',
+  vapidKeys.publicKey,
+  vapidKeys.privateKey
+);
+ 
+app.get('/push', (req, res) =>{
+const pushSubscription = {
+  endpoint: 'https://fcm.googleapis.com/fcm/send/cJJEftRU9zI:APA91bE9P6OODvCLJbqfvX_K3TgmzEVbx1ZI7ktQgxKSEorruuT4FgQoN46Ov9OvEWud-iARAb6L4p1chI3dGhMmZB1WFnZ3chYbeGskUar6sD-5jWY5ULX_Il8ne3cH85pUygoCNUvQ',
+  keys: {
+    auth: '7CJU7A8m2oBoycnKb0eXdA==',
+    p256dh: 'BO6YAUvC99luZ3wq5hxWTObWfpMqov8czoskwOd1MmWY9_q-jAzXOQnzJcZ9Tp6wNnRFw-goDQ_oqKu4w2dVY4c='
+  }
+};
 
-  app.post('/push', function (req, res) {
-    User.findOne({name: req.body.name}, function(err, user){
-        if (err) throw err;
-        var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
-            to: 'AAAAXEpaolo:APA91bExftBUrA-MrcEh65lmCI2MOzuWaUzsdUzM-Q9OtAi9XvrApIEuqurZLdknXoyBDUdaDNdYh_U550SBdnRWuN2T9Tp4a9kPdraYOXIwFroUsvJn_R_hSm5TqiYJ83SQAAbe1_63', 
-            
-            notification: {
-                title: 'LEEEROY', 
-                body: 'JEEENKINS' 
-            },
-        };
-        
-        fcm.send(message, function(err, response){
-            if (err) {
-                console.log("Something has gone wrong!", err);
-            } else {
-                console.log("Successfully sent with response: ", response);
-            }
-        });
-    })})
+webpush.sendNotification(pushSubscription, 'YOU FACE JARRAXXUS');
+})
 
 app.use((req, res, next) => {
     res._end = (obj, statusCode) => {
@@ -156,6 +107,9 @@ app.use((req, res, next) => {
     };
     next();
 });
+
+var add_action = require('./add_action');
+app.post('/add_action', add_action);
 
 var create = require('./create');
 app.post('/create', create);

@@ -12,7 +12,9 @@ var User = new Schema({
     pushToken: String,
     auth: String,
     p256dh: String,
-    endpoint: String
+    endpoint: String,
+    taskName: String,
+    deadline: Date
 });
 
 module.exports =  mongoose.model('User', User)
