@@ -3,14 +3,16 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var User = new Schema({
+    mail: {type: String, unique:true },
     name: {type: String, unique:true },
     password: String,
     passwordConf: String,
-    admin: Boolean
+    resetPasswordToken: String,
+    resetPasswordExpires: Date,
+    pushToken: String,
+    auth: String,
+    p256dh: String,
+    endpoint: String
 });
-
-/*User.methods.comparePassword = function(password){
-    return bcrypt.compareSync(password, this.hash_password);
-};*/
 
 module.exports =  mongoose.model('User', User)
