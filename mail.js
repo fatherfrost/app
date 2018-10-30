@@ -23,10 +23,10 @@ router.post('/mail', function (req, res) {
         else
         {
         let mailOptions = {
-            from: 'Login admin', // sender address
-            to: user.mail, // list of receivers
-            subject: 'Password remind', // Subject line
-            text: 'Here is your username: '+ user.name + ' and password: ' + user.password , // plain text body
+            from: 'Login admin',
+            to: user.mail,
+            subject: 'Password remind',
+            text: 'Here is your username: '+ user.name + ' and password: ' + user.password ,
         };
         transporter.sendMail(mailOptions, function(err, info)
             { 

@@ -10,9 +10,9 @@ router.post('/add_action', auth, function(req, res){
     if(req.body.taskName && req.body.deadline)
     {
      todo.push({taskName:value.req.body.taskName, deadline: value.req.body.deadline});
-     res.json({message:'SUUCEEESSSSSSSSSSSSSSSSSSSSSSSS'});
+     res.json({success: true});
     }
-})
+});
 
 function auth (req, res, next) {
     jwt.verify(req.headers.token, config.secret, function (err, decoded){

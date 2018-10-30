@@ -13,7 +13,6 @@ var User = new Schema({
     auth: String,
     p256dh: String,
     endpoint: String,
-    todo = []
 });
 
 module.exports =  mongoose.model('User', User)

@@ -36,11 +36,9 @@ app.post('/subscribe', function(req, res){
             res.json({message: 'success'});
         }
     })
-})
+});
 
- 
-// VAPID keys should only be generated only once.
-const vapidKeys = webpush.generateVAPIDKeys();
+/*const vapidKeys = webpush.generateVAPIDKeys();
  
 webpush.setfcmApiKey('AIzaSyD5wdhtTVf5VaBOwMntWwkvMrnF1ZipZP4');
 webpush.setVapidDetails(
@@ -59,7 +57,7 @@ const pushSubscription = {
 };
 
 webpush.sendNotification(pushSubscription, 'YOU FACE JARRAXXUS');
-})
+})*/
 
 app.use((req, res, next) => {
     res._end = (obj, statusCode) => {
@@ -69,8 +67,6 @@ app.use((req, res, next) => {
         statusCode = statusCode || 200;
 
         if (obj instanceof Error || obj.statusCode) {
-            // logger.error(obj);
-
             const ServiceError = require('./errors');
             if (!(obj instanceof ServiceError)) {
                 obj = new ServiceError(obj);
