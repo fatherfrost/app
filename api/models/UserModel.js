@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 //var bcrypt = require('bcrypt');
 var Schema = mongoose.Schema;
 
-var User = new Schema({
+var UserModel = new Schema({
     mail: {type: String, unique:true },
     name: {type: String, unique:true },
     password: String,
@@ -15,4 +15,4 @@ var User = new Schema({
     endpoint: String,
 });
 
-module.exports =  mongoose.model('User', User)
+module.exports =  mongoose.model('UserModel', UserModel)

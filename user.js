@@ -1,16 +1,16 @@
 var express = require('express');
 var router = express.Router();
 var config = require('./config'); 
-var User = require('./app/models/user');
+var User = require('./api/models/UserModel');
 var jwt = require('jsonwebtoken');
-var error = require('./errors');
+//var error = require('./errors');
 var bodyParser = require('body-parser');
 
 router.post('/user', function (req, res, next)
     {
         jwt.verify(req.headers.token, config.secret, function (err, decoded){
           if (err){
-              res._end(new error(err.message, error.LOGIN_TIME_OUT, error.CODE.INVALID_TOKEN));
+              //res._end(new error(err.message, error.LOGIN_TIME_OUT, error.CODE.INVALID_TOKEN));
              next();
         } else 
             {
