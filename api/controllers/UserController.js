@@ -59,6 +59,20 @@ router.post('/login', function (req, res) {
     });
 });
 
+router.post('/edit', auth, function (req, res) {
+   let user = new User(req.body);
+   if (user) {
+       User
+           .findOneAndUpdate({name: req.user.name}, user, {upsert: true, new: true})
+           .exec((err, usr) => {
+               if (err) return res._end(new error('User not found.', error.STATUS.NOT_AUTHORIZED, error.CODE.INVALID_AUTHORIZATION_USERNOTFOUND));
+               if (usr) {
+                   res._end({success: true, user: usr});
+               }
+           })
+   }
+});
+
 router.post('/password/new', auth, function (req, res) {
     let user = req.user;
     if (user.password !== req.body.password) {
