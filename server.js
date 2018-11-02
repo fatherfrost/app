@@ -67,6 +67,8 @@ app.post('/registration', UserController);
 
 app.post('/login', UserController);
 
+app.post('/edit', UserController);
+
 app.post('/password/new', UserController);
 
 app.post('/remind', UserController);
