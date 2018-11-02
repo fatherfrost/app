@@ -21,7 +21,7 @@ router.post('/registration', function (req, res) {
                 res._end(new error(err.message, error.STATUS.FORBIDDEN, error.CODE.ERROR_MONGODB_SAVING));
             }
             console.log('User created', user);
-            res.json({success: true, message: 'User created.'});
+            res._end({success: true, user: userData});
         });
     } else {
         if (req.body.passwordConf !== req.body.password)
@@ -48,10 +48,11 @@ router.post('/login', function (req, res) {
                 var token = jwt.sign(payload, req.app.get('secret'), {
                     expiresIn: "15m"
                 });
-                res.json({
+                res._end({
                     success: true,
                     message: 'Enjoy your token!',
-                    token: token
+                    token: token,
+                    user: user
                 });
             }
         }
