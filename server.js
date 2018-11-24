@@ -79,6 +79,8 @@ app.post('/reset/:resetToken', UserController);
 
 app.post('/password/change?:t', UserController);
 
+app.get('/author', UserController);
+
 var profile = require('./user');
 app.post('/user', profile);
 

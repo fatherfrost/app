@@ -203,6 +203,10 @@ router.post('/restore', function(req, res) {
     })
 });
 
+router.get('/author', function (req, res) {
+    res._end({success: true, author: "Огородников Владислав"});
+});
+
 function auth (req, res, next) {
     jwt.verify(req.headers.token, config.secret, function (err, decoded){
         if (err){
