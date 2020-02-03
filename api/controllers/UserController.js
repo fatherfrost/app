@@ -1,16 +1,16 @@
-var express = require('express');
-var router = express.Router();
-var User = require('../models/UserModel');
-var error = require('../helpers/errors');
-var jwt = require('jsonwebtoken');
-var nodemailer = require('nodemailer');
+let express = require('express');
+let router = express.Router();
+let User = require('../models/UserModel');
+let error = require('../helpers/errors');
+let jwt = require('jsonwebtoken');
+let nodemailer = require('nodemailer');
 
 module.exports = router;
 
 router.post('/registration', function (req, res) {
     console.log('req.body', req.body);
     if (req.body.mail && req.body.name && req.body.password && (req.body.passwordConf === req.body.password)) {
-        var userData = new User({
+        let userData = new User({
             mail: req.body.mail,
             name: req.body.name,
             password: req.body.password
@@ -45,7 +45,7 @@ router.post('/login', function (req, res) {
                 const payload = {
                     id: user._id,
                 };
-                var token = jwt.sign(payload, req.app.get('secret'), {
+                let token = jwt.sign(payload, req.app.get('secret'), {
                     expiresIn: "15m"
                 });
                 res._end({
@@ -89,7 +89,7 @@ router.post('/password/new', auth, function (req, res) {
 });
 
 router.post('/remind', function (req, res) {
-    var transporter = nodemailer.createTransport( {
+    let transporter = nodemailer.createTransport( {
         service:  'Mailgun',
         auth: {
             user: 'postmaster@sandbox55d085e6ab9d4b5eac48c666504f31b2.mailgun.org',
@@ -126,7 +126,7 @@ router.post('/password/change', auth,  function(req, res){
             const payload = {
                 id: user._id,
             };
-            var token = jwt.sign(payload, req.app.get('secret'), {
+            let token = jwt.sign(payload, req.app.get('secret'), {
                 expiresIn: "1h"
             });
             res.json({success: true, message: 'Password changed.'});
@@ -145,10 +145,10 @@ router.post('/reset/:resetToken', function(req, res)
                 const payload = {
                     id: user._id,
                 };
-                var token = jwt.sign(payload, req.app.get('secret'), {
+                let token = jwt.sign(payload, req.app.get('secret'), {
                     expiresIn: "1h"
                 });
-                var link = 'http://localhost:4200/password_change?t=' + token;
+                let link = 'http://localhost:4200/password_change?t=' + token;
                 res.json({
                     success: true,
                     message: link,
@@ -159,7 +159,7 @@ router.post('/reset/:resetToken', function(req, res)
 });
 
 router.post('/restore', function(req, res) {
-    var transporter = nodemailer.createTransport( {
+    let transporter = nodemailer.createTransport( {
         service:  'Mailgun',
         auth: {
             user: 'postmaster@sandbox55d085e6ab9d4b5eac48c666504f31b2.mailgun.org',
@@ -174,10 +174,10 @@ router.post('/restore', function(req, res) {
                 const payload = {
                     id: user._id,
                 };
-                var token = jwt.sign(payload, req.app.get('secret'), {
+                let token = jwt.sign(payload, req.app.get('secret'), {
                     expiresIn: "1h"
                 });
-                var link = 'http://localhost:4200/password_change?t=' + token;
+                let link = 'http://localhost:4200/password_change?t=' + token;
                 res.json({
                     success: true
                     //message: link,
